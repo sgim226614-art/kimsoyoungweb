@@ -22,6 +22,9 @@ export default async function LocalizedHomePage({
     heroDescription: dict.hero.description,
     primaryCta: dict.hero.primary,
     secondaryCta: dict.hero.secondary,
+    heroStatLabel: dict.hero.statLabel,
+    heroStatValue: dict.hero.statValue,
+    heroNote: dict.hero.note,
     aboutTitle: dict.sections.philosophy.title,
     aboutBody: dict.sections.philosophy.body,
     contactTitle: dict.sections.contact.title,
@@ -90,17 +93,13 @@ export default async function LocalizedHomePage({
             <div className="relative flex h-full min-h-[320px] flex-col justify-between">
               <div className="space-y-3">
                 <p className="text-xs uppercase tracking-[0.3em] text-white/70">
-                  {dict.hero.statLabel}
+                  {content.heroStatLabel}
                 </p>
-                <p className="font-display text-4xl">{dict.hero.statValue}</p>
+                <p className="font-display text-4xl">{content.heroStatValue}</p>
               </div>
               <div className="grid gap-4 rounded-[24px] bg-white/12 p-5 backdrop-blur">
                 <div className="h-px bg-white/20" />
-                <p className="text-sm leading-7 text-white/82">
-                  {locale === "ko"
-                    ? "피그마 화면에 맞춘 이미지, 이력, 수업 정보는 다음 단계에서 그대로 반영됩니다."
-                    : "Portfolio visuals, history, and class details will be mapped exactly from Figma in the next implementation step."}
-                </p>
+                <p className="text-sm leading-7 text-white/82">{content.heroNote}</p>
               </div>
             </div>
           </aside>

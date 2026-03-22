@@ -56,6 +56,18 @@ function validatePayload(payload: HomeContentInput) {
     return false;
   }
 
+  if (!payload.heroStatLabel || payload.heroStatLabel.length > 80) {
+    return false;
+  }
+
+  if (!payload.heroStatValue || payload.heroStatValue.length > 80) {
+    return false;
+  }
+
+  if (!payload.heroNote || payload.heroNote.length > 500) {
+    return false;
+  }
+
   if (!payload.aboutTitle || payload.aboutTitle.length > 120) {
     return false;
   }
@@ -115,6 +127,9 @@ export async function saveHomeContentAction(formData: FormData) {
     heroDescription: readText(formData, "heroDescription"),
     primaryCta: readText(formData, "heroPrimaryCta"),
     secondaryCta: readText(formData, "heroSecondaryCta"),
+    heroStatLabel: readText(formData, "heroStatLabel"),
+    heroStatValue: readText(formData, "heroStatValue"),
+    heroNote: readText(formData, "heroNote"),
     aboutTitle: readText(formData, "aboutTitle"),
     aboutBody: readText(formData, "aboutBody"),
     contactTitle: readText(formData, "contactTitle"),

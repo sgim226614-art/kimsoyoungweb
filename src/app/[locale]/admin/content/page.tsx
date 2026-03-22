@@ -33,6 +33,9 @@ export default async function AdminContentPage({
     heroDescription: dict.hero.description,
     primaryCta: dict.hero.primary,
     secondaryCta: dict.hero.secondary,
+    heroStatLabel: dict.hero.statLabel,
+    heroStatValue: dict.hero.statValue,
+    heroNote: dict.hero.note,
     aboutTitle: dict.sections.philosophy.title,
     aboutBody: dict.sections.philosophy.body,
     contactTitle: dict.sections.contact.title,
@@ -170,6 +173,60 @@ export default async function AdminContentPage({
                   className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
                 />
               </div>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label
+                  htmlFor="heroStatLabel"
+                  className="mb-2 block text-sm font-medium text-[#704d39]"
+                >
+                  {locale === "ko" ? "우측 카드 라벨" : "Hero Side Label"}
+                </label>
+                <input
+                  id="heroStatLabel"
+                  name="heroStatLabel"
+                  defaultValue={content.heroStatLabel}
+                  required
+                  maxLength={80}
+                  className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="heroStatValue"
+                  className="mb-2 block text-sm font-medium text-[#704d39]"
+                >
+                  {locale === "ko" ? "우측 카드 값" : "Hero Side Value"}
+                </label>
+                <input
+                  id="heroStatValue"
+                  name="heroStatValue"
+                  defaultValue={content.heroStatValue}
+                  required
+                  maxLength={80}
+                  className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="heroNote"
+                className="mb-2 block text-sm font-medium text-[#704d39]"
+              >
+                {locale === "ko" ? "우측 카드 설명" : "Hero Side Note"}
+              </label>
+              <textarea
+                id="heroNote"
+                name="heroNote"
+                rows={3}
+                defaultValue={content.heroNote}
+                required
+                maxLength={500}
+                className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
+              />
             </div>
 
             <div className="h-px bg-[#ecdccd]" />
@@ -339,6 +396,9 @@ export default async function AdminContentPage({
   hero_description text not null,
   primary_cta text not null,
   secondary_cta text not null,
+  hero_stat_label text not null,
+  hero_stat_value text not null,
+  hero_note text not null,
   about_title text not null,
   about_body text not null,
   contact_title text not null,

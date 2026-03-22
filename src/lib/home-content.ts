@@ -11,6 +11,9 @@ export type HomeContentInput = {
   heroDescription: string;
   primaryCta: string;
   secondaryCta: string;
+  heroStatLabel: string;
+  heroStatValue: string;
+  heroNote: string;
   aboutTitle: string;
   aboutBody: string;
   contactTitle: string;
@@ -33,6 +36,9 @@ type HomeContentRow = {
   hero_description: string;
   primary_cta: string;
   secondary_cta: string;
+  hero_stat_label: string;
+  hero_stat_value: string;
+  hero_note: string;
   about_title: string;
   about_body: string;
   contact_title: string;
@@ -95,7 +101,7 @@ export async function getHomeContent(
   const { data, error } = await supabase
     .from("site_home_content")
     .select(
-      "locale, hero_title, hero_description, primary_cta, secondary_cta, about_title, about_body, contact_title, contact_body, programs_json, reviews_json, updated_at",
+      "locale, hero_title, hero_description, primary_cta, secondary_cta, hero_stat_label, hero_stat_value, hero_note, about_title, about_body, contact_title, contact_body, programs_json, reviews_json, updated_at",
     )
     .eq("locale", locale)
     .maybeSingle<HomeContentRow>();
@@ -109,6 +115,9 @@ export async function getHomeContent(
     heroDescription: data.hero_description || fallback.heroDescription,
     primaryCta: data.primary_cta || fallback.primaryCta,
     secondaryCta: data.secondary_cta || fallback.secondaryCta,
+    heroStatLabel: data.hero_stat_label || fallback.heroStatLabel,
+    heroStatValue: data.hero_stat_value || fallback.heroStatValue,
+    heroNote: data.hero_note || fallback.heroNote,
     aboutTitle: data.about_title || fallback.aboutTitle,
     aboutBody: data.about_body || fallback.aboutBody,
     contactTitle: data.contact_title || fallback.contactTitle,
@@ -136,6 +145,9 @@ export async function saveHomeContent(
       hero_description: payload.heroDescription,
       primary_cta: payload.primaryCta,
       secondary_cta: payload.secondaryCta,
+      hero_stat_label: payload.heroStatLabel,
+      hero_stat_value: payload.heroStatValue,
+      hero_note: payload.heroNote,
       about_title: payload.aboutTitle,
       about_body: payload.aboutBody,
       contact_title: payload.contactTitle,

@@ -4,6 +4,9 @@ create table if not exists public.site_home_content (
   hero_description text not null,
   primary_cta text not null,
   secondary_cta text not null,
+  hero_stat_label text not null,
+  hero_stat_value text not null,
+  hero_note text not null,
   about_title text not null,
   about_body text not null,
   contact_title text not null,
@@ -30,3 +33,12 @@ alter table public.site_home_content
 
 alter table public.site_home_content
   add column if not exists reviews_json jsonb;
+
+alter table public.site_home_content
+  add column if not exists hero_stat_label text;
+
+alter table public.site_home_content
+  add column if not exists hero_stat_value text;
+
+alter table public.site_home_content
+  add column if not exists hero_note text;

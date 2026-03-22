@@ -17,6 +17,7 @@ type Dictionary = {
     secondary: string;
     statLabel: string;
     statValue: string;
+    note: string;
   };
   sections: {
     philosophy: {
@@ -70,6 +71,7 @@ const dictionaries: Record<Locale, Dictionary> = {
       secondary: "프로그램 보기",
       statLabel: "1:1 맞춤 학습 관리",
       statValue: "Elementary to Middle",
+      note: "피그마 화면에 맞춘 이미지, 이력, 수업 정보는 다음 단계에서 그대로 반영됩니다.",
     },
     sections: {
       philosophy: {
@@ -139,6 +141,7 @@ const dictionaries: Record<Locale, Dictionary> = {
       secondary: "View Programs",
       statLabel: "Personalized Study Care",
       statValue: "Elementary to Middle",
+      note: "Portfolio visuals, history, and class details will be mapped exactly from Figma in the next implementation step.",
     },
     sections: {
       philosophy: {
