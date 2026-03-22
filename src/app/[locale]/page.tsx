@@ -2,198 +2,275 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { LocaleSwitch } from "@/components/locale-switch";
-import { getHomeContent } from "@/lib/home-content";
-import { getDictionary, isLocale } from "@/lib/i18n";
+import { isLocale } from "@/lib/i18n";
+import {
+  getPortfolioContent,
+  type PortfolioCategory,
+  type PortfolioProject,
+} from "@/lib/portfolio-content";
+
+function ArrowButton({ direction }: { direction: "left" | "right" }) {
+  return (
+    <button
+      type="button"
+      aria-label={direction === "left" ? "Previous" : "Next"}
+      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/35 text-sm text-white/90 transition hover:border-white"
+    >
+      {direction === "left" ? "←" : "→"}
+    </button>
+  );
+}
+
+function ProjectBlock({
+  project,
+  index,
+  locale,
+}: {
+  project: PortfolioProject;
+  index: number;
+  locale: "ko" | "en";
+}) {
+  const [recent = "", previous = ""] = project.period
+    .split("/")
+    .map((item) => item.trim());
+  const projectLabel = locale === "ko" ? "프로젝트" : "PROJECT";
+
+  return (
+    <article className="rounded-[16px] border border-white/10 bg-[#040404] p-4 sm:p-8">
+      <div className="rounded-[12px] border border-white/8 p-4 sm:p-6">
+        <div
+          className="rounded-[12px] border border-white/10 p-6 sm:p-10"
+          style={{ backgroundImage: project.accent }}
+        >
+          <p className="text-xs uppercase tracking-[0.22em] text-white/65">
+            {project.client}
+          </p>
+          <h3 className="mt-4 font-display text-4xl text-white sm:text-5xl">
+            {project.title}
+          </h3>
+          <p className="mt-4 max-w-2xl text-sm leading-7 text-white/82 sm:text-base">
+            {project.summary}
+          </p>
+
+          <div className="mt-10 grid gap-3 sm:grid-cols-3">
+            {project.bullets.map((item, bulletIndex) => (
+              <div
+                key={`${project.slug}-bullet-${bulletIndex}`}
+                className="rounded-xl border border-white/12 bg-black/28 p-4"
+              >
+                <p className="text-xs uppercase tracking-[0.2em] text-white/55">
+                  {String(bulletIndex + 1).padStart(2, "0")}
+                </p>
+                <p className="mt-2 text-sm leading-6 text-white/88">{item}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-5 flex items-center justify-center gap-4">
+          <ArrowButton direction="left" />
+          <p className="text-sm tracking-[0.18em] text-white/70">
+            {project.frameLabel}
+          </p>
+          <ArrowButton direction="right" />
+        </div>
+      </div>
+
+      <div className="mt-6 grid gap-3 text-sm text-white/85 sm:grid-cols-[130px_1fr]">
+        <p>{recent}</p>
+        <p>
+          {project.client} / {project.role}
+        </p>
+        <p>{previous}</p>
+        <p>{project.summary}</p>
+      </div>
+
+      <div className="mt-4 flex items-center justify-end gap-2">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div
+            key={`${project.slug}-thumb-${i}`}
+            className="h-12 w-12 rounded-md border border-white/18 bg-white/8"
+          />
+        ))}
+      </div>
+
+      <p className="mt-4 text-right text-xs uppercase tracking-[0.24em] text-white/35">
+        {projectLabel} {index + 1}
+      </p>
+    </article>
+  );
+}
+
+function CategorySection({
+  category,
+  locale,
+}: {
+  category: PortfolioCategory;
+  locale: "ko" | "en";
+}) {
+  return (
+    <section id={category.id} className="mx-auto mt-14 w-full max-w-6xl sm:mt-20">
+      <header className="mb-6 px-1 sm:mb-10">
+        <p className="text-xs uppercase tracking-[0.25em] text-white/45">
+          {category.menu}
+        </p>
+        <h2 className="mt-2 font-display text-3xl text-white sm:text-5xl">
+          {category.heading}
+        </h2>
+        <p className="mt-4 max-w-3xl text-sm leading-7 text-white/70 sm:text-base">
+          {category.intro}
+        </p>
+      </header>
+
+      <div className="space-y-10 sm:space-y-16">
+        {category.projects.map((project, index) => (
+          <ProjectBlock
+            key={project.slug}
+            project={project}
+            index={index}
+            locale={locale}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
 
 export default async function LocalizedHomePage({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
+  const { locale: rawLocale } = await params;
 
-  if (!isLocale(locale)) {
+  if (!isLocale(rawLocale)) {
     notFound();
   }
 
-  const dict = getDictionary(locale);
-  const content = await getHomeContent(locale, {
-    heroTitle: dict.hero.title,
-    heroDescription: dict.hero.description,
-    primaryCta: dict.hero.primary,
-    secondaryCta: dict.hero.secondary,
-    heroStatLabel: dict.hero.statLabel,
-    heroStatValue: dict.hero.statValue,
-    heroNote: dict.hero.note,
-    aboutTitle: dict.sections.philosophy.title,
-    aboutBody: dict.sections.philosophy.body,
-    contactTitle: dict.sections.contact.title,
-    contactBody: dict.sections.contact.body,
-    programs: dict.sections.programs.items,
-    reviews: dict.sections.reviews.items,
-  });
+  const locale: "ko" | "en" = rawLocale;
+  const content = getPortfolioContent(locale);
+
+  const menuItems = [
+    { id: "main", label: content.navMain },
+    { id: "about", label: content.navAbout },
+    ...content.categories.map((category) => ({
+      id: category.id,
+      label: category.menu,
+    })),
+  ];
 
   return (
-    <main className="px-6 pb-16 pt-6 sm:px-10 lg:px-14">
-      <section className="animate-rise mx-auto flex w-full max-w-7xl flex-col overflow-hidden rounded-[32px] border border-white/60 bg-white/75 shadow-[0_24px_80px_rgba(81,47,28,0.12)] backdrop-blur">
-        <header className="flex flex-col gap-5 border-b border-[#ecdccd] px-6 py-6 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-10">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#9d6e50]">
-              {dict.hero.eyebrow}
-            </p>
-            <h1 className="mt-3 font-display text-4xl leading-none text-[#2f1c12] sm:text-5xl">
-              {locale === "ko" ? "김소영" : "Kim So Young"}
-            </h1>
-          </div>
+    <div className="portfolio-noise relative isolate min-h-screen bg-[#020202] text-white">
+      <header className="sticky top-0 z-30 border-b border-white/10 bg-black/80 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-8">
+          <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] uppercase tracking-[0.18em] text-white/85 sm:text-xs">
+            {menuItems.map((item) => (
+              <a key={item.id} href={`#${item.id}`} className="transition hover:text-white">
+                {item.label}
+              </a>
+            ))}
+          </nav>
 
-          <nav className="flex flex-wrap items-center gap-3 text-sm text-[#7b5a48]">
-            <a href="#about">{dict.nav.about}</a>
-            <a href="#portfolio">{dict.nav.programs}</a>
-            <a href="#reviews">{dict.nav.reviews}</a>
-            <Link href={`/${locale}/admin/login`}>{dict.nav.admin}</Link>
+          <div className="flex items-center gap-2">
+            <Link href={`/${locale}/admin/login`} className="text-xs text-white/70">
+              ADMIN
+            </Link>
             <LocaleSwitch
               locale={locale}
-              className="inline-flex rounded-full border border-[#c9b2a0] px-4 py-2 text-sm font-medium text-[#6b4632] transition hover:border-[#8f5f42] hover:text-[#8f5f42]"
+              className="rounded-full border border-white/35 px-3 py-1 text-xs text-white/80"
             />
-          </nav>
-        </header>
+          </div>
+        </div>
+      </header>
 
-        <div className="grid gap-10 px-6 py-10 sm:px-8 lg:grid-cols-[1.2fr_0.8fr] lg:px-10 lg:py-14">
-          <div className="flex flex-col justify-between gap-8">
-            <div className="space-y-6">
-              <p className="inline-flex rounded-full bg-[#f8eadf] px-4 py-2 text-sm text-[#9f6647]">
-                {dict.hero.eyebrow}
+      <main className="pb-24">
+        <section id="main" className="mx-auto w-full max-w-7xl px-4 pt-10 sm:px-8 sm:pt-16">
+          <div className="mx-auto max-w-3xl rounded-[20px] border border-white/20 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_55%)] p-6 sm:p-10">
+            <h1 className="text-4xl font-semibold tracking-tight text-[#f20e0e] sm:text-7xl">
+              {content.heroTitle}
+            </h1>
+            <div className="mt-2 h-px bg-white/20" />
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+              <p className="text-xs uppercase tracking-[0.28em] text-white/55">
+                Portfolio Interface / Visual Design / Presentation
               </p>
-              <h2 className="max-w-3xl font-display text-5xl leading-[0.95] text-[#2a170f] sm:text-6xl">
-                {content.heroTitle}
-              </h2>
-              <p className="max-w-2xl text-base leading-8 text-[#5e4638] sm:text-lg">
-                {content.heroDescription}
+              <p className="font-display text-4xl text-white/88 sm:text-5xl">
+                {content.heroSubtitle}
               </p>
-            </div>
-
-            <div className="flex flex-col gap-4 sm:flex-row">
-              <a
-                href="#contact"
-                className="inline-flex items-center justify-center rounded-full bg-[#2b170f] px-6 py-4 text-sm font-semibold text-[#fff7f1] transition hover:bg-[#4a2c1f]"
-              >
-                {content.primaryCta}
-              </a>
-              <a
-                href="#portfolio"
-                className="inline-flex items-center justify-center rounded-full border border-[#cfb8a6] px-6 py-4 text-sm font-semibold text-[#6d4835] transition hover:border-[#8f5f42] hover:text-[#8f5f42]"
-              >
-                {content.secondaryCta}
-              </a>
             </div>
           </div>
+        </section>
 
-          <aside className="animate-float relative overflow-hidden rounded-[28px] bg-[linear-gradient(160deg,#3a2114_0%,#b57c58_52%,#f4d5bf_100%)] p-7 text-[#fffaf7] shadow-[inset_0_1px_0_rgba(255,255,255,0.24)]">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.35),transparent_34%)]" />
-            <div className="relative flex h-full min-h-[320px] flex-col justify-between">
-              <div className="space-y-3">
-                <p className="text-xs uppercase tracking-[0.3em] text-white/70">
-                  {content.heroStatLabel}
-                </p>
-                <p className="font-display text-4xl">{content.heroStatValue}</p>
+        <section id="about" className="mx-auto mt-16 w-full max-w-6xl px-4 sm:mt-24 sm:px-8">
+          <div className="rounded-[18px] border border-white/10 bg-[#050505] p-6 sm:p-10">
+            <h2 className="font-display text-4xl text-white sm:text-6xl">
+              {content.about.heading}
+            </h2>
+            <p className="mt-2 text-sm text-white/60">{content.about.years}</p>
+
+            <div className="mt-8 grid gap-8 lg:grid-cols-[220px_1fr]">
+              <div>
+                <div className="h-52 w-40 rounded-lg border border-white/15 bg-[linear-gradient(180deg,#313131_0%,#0f0f0f_100%)]" />
+                <p className="mt-6 text-3xl font-semibold">{content.about.name}</p>
+                <p className="mt-2 text-xs text-white/55">{content.about.contact}</p>
               </div>
-              <div className="grid gap-4 rounded-[24px] bg-white/12 p-5 backdrop-blur">
-                <div className="h-px bg-white/20" />
-                <p className="text-sm leading-7 text-white/82">{content.heroNote}</p>
-              </div>
-            </div>
-          </aside>
-        </div>
-      </section>
 
-      <section
-        id="about"
-        className="mx-auto mt-8 grid w-full max-w-7xl gap-6 lg:grid-cols-[0.8fr_1.2fr]"
-      >
-        <div className="rounded-[28px] bg-[#2d1a12] p-8 text-[#fdf3eb] shadow-[0_16px_40px_rgba(53,28,18,0.18)]">
-          <p className="text-xs uppercase tracking-[0.28em] text-[#d7b198]">
-            About
-          </p>
-          <h3 className="mt-4 font-display text-4xl">
-            {content.aboutTitle}
-          </h3>
-        </div>
-        <div className="rounded-[28px] border border-[#ead8c9] bg-[#fffaf5] p-8 text-[#5b4437]">
-          <p className="text-lg leading-8">{content.aboutBody}</p>
-        </div>
-      </section>
-
-      <section id="portfolio" className="mx-auto mt-8 w-full max-w-7xl">
-        <div className="rounded-[32px] border border-[#ead9ca] bg-white/70 p-8 shadow-[0_20px_60px_rgba(93,61,42,0.08)]">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-[#ae7b59]">
-                Portfolio
-              </p>
-              <h3 className="mt-3 font-display text-4xl text-[#2b1810]">
-                {dict.sections.programs.title}
-              </h3>
-            </div>
-          </div>
-
-          <div className="mt-8 grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
-            <article className="rounded-[26px] bg-[linear-gradient(145deg,#2f1b11_0%,#8f6045_58%,#ebc9b1_100%)] p-7 text-[#fff8f3] shadow-[0_16px_42px_rgba(65,36,24,0.35)]">
-              <p className="text-sm uppercase tracking-[0.28em] text-white/75">01</p>
-              <h4 className="mt-4 font-display text-4xl leading-none">
-                {content.programs[0].title}
-              </h4>
-              <p className="mt-5 max-w-2xl text-sm leading-7 text-white/86">
-                {content.programs[0].description}
-              </p>
-            </article>
-
-            <div className="grid gap-5">
-              {content.programs.slice(1).map((item, index) => (
-                <article
-                  key={item.title}
-                  className="rounded-[24px] bg-[#f8f0e8] p-6 text-[#4f392c] transition hover:-translate-y-1 hover:shadow-[0_14px_30px_rgba(92,60,41,0.14)]"
-                >
-                  <p className="text-sm uppercase tracking-[0.24em] text-[#ab7b58]">
-                    0{index + 2}
+              <div className="grid gap-7 sm:grid-cols-2">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.24em] text-white/45">
+                    {content.about.educationLabel}
                   </p>
-                  <h4 className="mt-3 text-2xl font-semibold">{item.title}</h4>
-                  <p className="mt-3 leading-7">{item.description}</p>
-                </article>
+                  <ul className="mt-3 space-y-2 text-sm text-white/82">
+                    {content.about.education.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.24em] text-white/45">
+                    {content.about.certificatesLabel}
+                  </p>
+                  <ul className="mt-3 space-y-2 text-sm text-white/82">
+                    {content.about.certificates.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-10 space-y-7">
+              {content.about.timeline.map((item) => (
+                <div key={`${item.period}-${item.company}`} className="grid gap-2 sm:grid-cols-[170px_1fr]">
+                  <p className="text-sm text-white/76">{item.period}</p>
+                  <p className="text-sm text-white/88">
+                    {item.company} / {item.role}
+                    <br />
+                    <span className="text-white/60">{item.detail}</span>
+                  </p>
+                </div>
               ))}
             </div>
           </div>
-        </div>
-      </section>
 
-      <section id="reviews" className="mx-auto mt-8 w-full max-w-7xl">
-        <div className="grid gap-5 lg:grid-cols-3">
-          {content.reviews.map((item, index) => (
-            <article
-              key={item}
-              className="rounded-[28px] border border-[#e9d8ca] bg-white/80 p-7 shadow-[0_16px_40px_rgba(96,67,46,0.08)]"
-            >
-              <p className="text-sm uppercase tracking-[0.28em] text-[#b07e5b]">
-                0{index + 1}
-              </p>
-              <p className="mt-5 text-lg leading-8 text-[#4c362b]">{item}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+          <div className="mt-10 space-y-8">
+            {content.about.narratives.map((item) => (
+              <article key={item.title} className="rounded-[16px] border border-white/10 bg-[#040404] p-6 sm:p-8">
+                <h3 className="text-2xl font-semibold text-white">{item.title}</h3>
+                <div className="mt-4 space-y-3 text-sm leading-7 text-white/78 sm:text-base">
+                  {item.body.map((line) => (
+                    <p key={line}>{line}</p>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
 
-      <section id="contact" className="mx-auto mt-8 w-full max-w-7xl">
-        <div className="rounded-[32px] bg-[linear-gradient(135deg,#fff7f1_0%,#efddcd_100%)] p-8">
-          <p className="text-xs uppercase tracking-[0.28em] text-[#9c6d50]">
-            Contact
-          </p>
-          <h3 className="mt-3 font-display text-4xl text-[#2b1810]">
-            {content.contactTitle}
-          </h3>
-          <p className="mt-4 max-w-3xl text-lg leading-8 text-[#5f4638]">
-            {content.contactBody}
-          </p>
-        </div>
-      </section>
-    </main>
+        {content.categories.map((category) => (
+          <CategorySection key={category.id} category={category} locale={locale} />
+        ))}
+      </main>
+    </div>
   );
 }

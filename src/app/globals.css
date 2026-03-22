@@ -76,3 +76,21 @@ select {
 .animate-float {
   animation: floatSlow 5s ease-in-out infinite;
 }
+
+.portfolio-noise {
+  background-image:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.04), transparent 30%),
+    linear-gradient(180deg, #020202 0%, #050505 100%);
+}
+
+.portfolio-noise::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.045) 0.8px, transparent 0.8px);
+  background-size: 3px 3px;
+  opacity: 0.12;
+  z-index: -1;
+}
