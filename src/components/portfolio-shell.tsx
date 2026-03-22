@@ -44,8 +44,8 @@ export function PortfolioShell({
                   href={getPortfolioHref(locale, item.slug)}
                   className={
                     isActive
-                      ? "whitespace-nowrap text-white"
-                      : "whitespace-nowrap text-white/94 transition hover:text-white"
+                      ? "whitespace-nowrap font-medium text-white"
+                      : "whitespace-nowrap font-normal text-white/94 transition-colors hover:font-semibold hover:text-white"
                   }
                 >
                   {item.label}
