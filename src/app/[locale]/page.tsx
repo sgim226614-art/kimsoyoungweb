@@ -1,21 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
-
-function LocaleToggle({ locale }: { locale: Locale }) {
-  const href = locale === "ko" ? "/en" : "/ko";
-  const label = locale === "ko" ? "EN" : "KO";
-
-  return (
-    <Link
-      href={href}
-      className="inline-flex rounded-full border border-[#c9b2a0] px-4 py-2 text-sm font-medium text-[#6b4632] transition hover:border-[#8f5f42] hover:text-[#8f5f42]"
-    >
-      {label}
-    </Link>
-  );
-}
+import { LocaleSwitch } from "@/components/locale-switch";
+import { getDictionary, isLocale } from "@/lib/i18n";
 
 export default async function LocalizedHomePage({
   params,
@@ -32,7 +19,7 @@ export default async function LocalizedHomePage({
 
   return (
     <main className="px-6 pb-16 pt-6 sm:px-10 lg:px-14">
-      <section className="mx-auto flex w-full max-w-7xl flex-col overflow-hidden rounded-[32px] border border-white/60 bg-white/75 shadow-[0_24px_80px_rgba(81,47,28,0.12)] backdrop-blur">
+      <section className="animate-rise mx-auto flex w-full max-w-7xl flex-col overflow-hidden rounded-[32px] border border-white/60 bg-white/75 shadow-[0_24px_80px_rgba(81,47,28,0.12)] backdrop-blur">
         <header className="flex flex-col gap-5 border-b border-[#ecdccd] px-6 py-6 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-10">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#9d6e50]">
@@ -48,7 +35,10 @@ export default async function LocalizedHomePage({
             <a href="#programs">{dict.nav.programs}</a>
             <a href="#reviews">{dict.nav.reviews}</a>
             <Link href={`/${locale}/admin/login`}>{dict.nav.admin}</Link>
-            <LocaleToggle locale={locale} />
+            <LocaleSwitch
+              locale={locale}
+              className="inline-flex rounded-full border border-[#c9b2a0] px-4 py-2 text-sm font-medium text-[#6b4632] transition hover:border-[#8f5f42] hover:text-[#8f5f42]"
+            />
           </nav>
         </header>
 
@@ -82,7 +72,7 @@ export default async function LocalizedHomePage({
             </div>
           </div>
 
-          <aside className="relative overflow-hidden rounded-[28px] bg-[linear-gradient(160deg,#3a2114_0%,#b57c58_52%,#f4d5bf_100%)] p-7 text-[#fffaf7] shadow-[inset_0_1px_0_rgba(255,255,255,0.24)]">
+          <aside className="animate-float relative overflow-hidden rounded-[28px] bg-[linear-gradient(160deg,#3a2114_0%,#b57c58_52%,#f4d5bf_100%)] p-7 text-[#fffaf7] shadow-[inset_0_1px_0_rgba(255,255,255,0.24)]">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.35),transparent_34%)]" />
             <div className="relative flex h-full min-h-[320px] flex-col justify-between">
               <div className="space-y-3">

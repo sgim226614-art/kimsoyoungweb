@@ -46,6 +46,10 @@ type Dictionary = {
     dashboardTitle: string;
     dashboardDescription: string;
     logout: string;
+    backMain: string;
+    dashboard: string;
+    content: string;
+    welcome: string;
   };
 };
 
@@ -113,6 +117,10 @@ const dictionaries: Record<Locale, Dictionary> = {
       dashboardDescription:
         "추후 공지, 후기, 프로그램 정보를 여기서 관리하도록 확장할 수 있습니다.",
       logout: "로그아웃",
+      backMain: "메인으로 돌아가기",
+      dashboard: "대시보드",
+      content: "콘텐츠 관리",
+      welcome: "관리자 전용 페이지입니다.",
     },
   },
   en: {
@@ -181,6 +189,10 @@ const dictionaries: Record<Locale, Dictionary> = {
       dashboardDescription:
         "This can be extended to manage notices, reviews, and program details later.",
       logout: "Sign out",
+      backMain: "Back to main",
+      dashboard: "Dashboard",
+      content: "Content",
+      welcome: "Admin-only workspace.",
     },
   },
 };

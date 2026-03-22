@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { loginAction } from "@/app/[locale]/admin/actions";
+import { LocaleSwitch } from "@/components/locale-switch";
 import { getDictionary, isLocale } from "@/lib/i18n";
 
 export default async function AdminLoginPage({
@@ -25,8 +26,8 @@ export default async function AdminLoginPage({
       : "The default development account is admin / changeme123!.";
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-6 py-12">
-      <div className="grid w-full max-w-5xl overflow-hidden rounded-[32px] border border-white/60 bg-white/75 shadow-[0_28px_80px_rgba(70,40,20,0.14)] backdrop-blur lg:grid-cols-[0.95fr_1.05fr]">
+    <main className="flex min-h-[calc(100vh-88px)] items-center justify-center px-6 py-12">
+      <div className="animate-rise grid w-full max-w-5xl overflow-hidden rounded-[32px] border border-white/60 bg-white/75 shadow-[0_28px_80px_rgba(70,40,20,0.14)] backdrop-blur lg:grid-cols-[0.95fr_1.05fr]">
         <section className="bg-[linear-gradient(145deg,#2e1a11_0%,#8b5d43_60%,#dcb89e_100%)] p-8 text-[#fff8f3] sm:p-10">
           <p className="text-xs uppercase tracking-[0.28em] text-white/70">
             Admin
@@ -46,15 +47,13 @@ export default async function AdminLoginPage({
 
         <section className="p-8 sm:p-10">
           <div className="flex items-center justify-between">
-            <Link href={`/${locale}`} className="text-sm text-[#8e6248]">
-              {locale === "ko" ? "메인으로 돌아가기" : "Back to main"}
+            <Link href={`/${locale}`} className="text-sm text-[#8e6248] underline">
+              {dict.admin.backMain}
             </Link>
-            <Link
-              href={locale === "ko" ? "/en/admin/login" : "/ko/admin/login"}
+            <LocaleSwitch
+              locale={locale}
               className="rounded-full border border-[#d7c1b1] px-4 py-2 text-sm text-[#724c39]"
-            >
-              {locale === "ko" ? "EN" : "KO"}
-            </Link>
+            />
           </div>
 
           <form action={loginAction} className="mt-16 space-y-5">

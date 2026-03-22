@@ -1,4 +1,5 @@
 import { notFound, redirect } from "next/navigation";
+import Link from "next/link";
 
 import { logoutAction } from "@/app/[locale]/admin/actions";
 import { isAdminAuthenticated } from "@/lib/auth";
@@ -54,8 +55,8 @@ export default async function AdminDashboardPage({
         ];
 
   return (
-    <main className="min-h-screen px-6 py-8 sm:px-10 lg:px-14">
-      <div className="mx-auto max-w-7xl rounded-[32px] border border-white/60 bg-white/78 p-8 shadow-[0_24px_80px_rgba(81,47,28,0.12)] backdrop-blur sm:p-10">
+    <main className="px-6 py-8 sm:px-10 lg:px-14">
+      <div className="animate-rise mx-auto max-w-7xl rounded-[32px] border border-white/60 bg-white/78 p-8 shadow-[0_24px_80px_rgba(81,47,28,0.12)] backdrop-blur sm:p-10">
         <div className="flex flex-col gap-5 border-b border-[#eadacc] pb-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.28em] text-[#a16f50]">
@@ -84,13 +85,19 @@ export default async function AdminDashboardPage({
           {cards.map((card) => (
             <article
               key={card.title}
-              className="rounded-[28px] bg-[#f8efe7] p-6 text-[#50392b]"
+              className="rounded-[28px] bg-[#f8efe7] p-6 text-[#50392b] transition hover:-translate-y-1 hover:shadow-[0_20px_36px_rgba(88,57,40,0.12)]"
             >
               <p className="text-sm uppercase tracking-[0.24em] text-[#b07f5e]">
                 Module
               </p>
               <h2 className="mt-4 text-2xl font-semibold">{card.title}</h2>
               <p className="mt-4 leading-7">{card.body}</p>
+              <Link
+                href={`/${locale}/admin/content`}
+                className="mt-5 inline-flex rounded-full border border-[#d1b8a7] px-4 py-2 text-sm text-[#7e533d]"
+              >
+                {dict.admin.content}
+              </Link>
             </article>
           ))}
         </section>
