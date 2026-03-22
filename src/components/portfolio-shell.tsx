@@ -34,7 +34,7 @@ export function PortfolioShell({
     <div className="portfolio-noise relative isolate min-h-screen bg-[#020202] text-white">
       <header className="sticky top-0 z-30 bg-black/92 backdrop-blur">
         <div className="relative mx-auto flex h-[84px] w-full max-w-7xl items-center px-4 sm:px-8">
-          <nav className="absolute left-1/2 flex -translate-x-1/2 items-center gap-x-7 font-medium text-[18px] leading-none tracking-[-0.01em] md:gap-x-9 md:text-[19px] lg:gap-x-11">
+          <nav className="absolute left-1/2 flex w-[min(1080px,calc(100%-150px))] -translate-x-1/2 items-center justify-between font-normal text-[18px] leading-none tracking-[-0.012em] md:text-[19px]">
             {menuItems.map((item) => {
               const isActive = item.slug === activeSlug;
 
@@ -45,7 +45,7 @@ export function PortfolioShell({
                   className={
                     isActive
                       ? "whitespace-nowrap text-white"
-                      : "whitespace-nowrap text-white/92 transition hover:text-white"
+                      : "whitespace-nowrap text-white/94 transition hover:text-white"
                   }
                 >
                   {item.label}
