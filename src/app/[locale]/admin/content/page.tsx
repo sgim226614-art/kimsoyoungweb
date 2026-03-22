@@ -1,14 +1,20 @@
 import { notFound, redirect } from "next/navigation";
 
+import { saveHomeContentAction } from "@/app/[locale]/admin/content/actions";
 import { isAdminAuthenticated } from "@/lib/auth";
+import { getHomeHeroContent } from "@/lib/home-content";
 import { getDictionary, isLocale } from "@/lib/i18n";
+import { isSupabaseAdminConfigured } from "@/lib/supabase-admin";
 
 export default async function AdminContentPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ status?: string; error?: string }>;
 }) {
   const { locale } = await params;
+  const { status, error } = await searchParams;
 
   if (!isLocale(locale)) {
     notFound();
@@ -21,6 +27,30 @@ export default async function AdminContentPage({
   }
 
   const dict = getDictionary(locale);
+  const isConfigured = isSupabaseAdminConfigured();
+  const hero = await getHomeHeroContent(locale, {
+    title: dict.hero.title,
+    description: dict.hero.description,
+    primaryCta: dict.hero.primary,
+    secondaryCta: dict.hero.secondary,
+  });
+
+  const savedText =
+    locale === "ko"
+      ? "저장 완료: 메인 페이지 문구가 갱신되었습니다."
+      : "Saved: homepage copy has been updated.";
+  const validationText =
+    locale === "ko"
+      ? "입력값이 유효하지 않습니다. 길이 제한을 확인해주세요."
+      : "Invalid input. Please check field length limits.";
+  const configText =
+    locale === "ko"
+      ? "Supabase 설정이 없습니다. .env.local을 확인해주세요."
+      : "Supabase configuration is missing. Check .env.local.";
+  const databaseText =
+    locale === "ko"
+      ? "DB 저장 중 오류가 발생했습니다. 테이블 구성과 권한을 확인해주세요."
+      : "Database save failed. Check table schema and permissions.";
 
   return (
     <main className="px-6 py-8 sm:px-10 lg:px-14">
@@ -34,71 +64,147 @@ export default async function AdminContentPage({
           </h1>
           <p className="mt-3 text-[#604839]">
             {locale === "ko"
-              ? "이 영역은 메인 페이지 문구/버튼/섹션 내용을 편집하는 CMS 폼으로 확장될 자리입니다."
-              : "This area is prepared for a CMS form to edit hero copy, buttons, and main section content."}
+              ? "여기서 저장한 값이 메인 페이지 히어로 텍스트에 바로 반영됩니다."
+              : "Saved values here are reflected in the main page hero text."}
           </p>
 
-          <form className="mt-8 space-y-5">
+          {status === "saved" ? (
+            <p className="mt-4 rounded-xl bg-[#e8f4ea] px-4 py-3 text-sm text-[#2e6b3e]">
+              {savedText}
+            </p>
+          ) : null}
+
+          {error === "validation" ? (
+            <p className="mt-4 rounded-xl bg-[#fdeeea] px-4 py-3 text-sm text-[#a54834]">
+              {validationText}
+            </p>
+          ) : null}
+
+          {error === "config" ? (
+            <p className="mt-4 rounded-xl bg-[#fdeeea] px-4 py-3 text-sm text-[#a54834]">
+              {configText}
+            </p>
+          ) : null}
+
+          {error === "database" ? (
+            <p className="mt-4 rounded-xl bg-[#fdeeea] px-4 py-3 text-sm text-[#a54834]">
+              {databaseText}
+            </p>
+          ) : null}
+
+          <form action={saveHomeContentAction} className="mt-8 space-y-5">
+            <input type="hidden" name="locale" value={locale} />
+
             <div>
-              <label className="mb-2 block text-sm font-medium text-[#704d39]">
+              <label
+                htmlFor="heroTitle"
+                className="mb-2 block text-sm font-medium text-[#704d39]"
+              >
                 {locale === "ko" ? "메인 타이틀" : "Hero Title"}
               </label>
               <input
-                type="text"
-                placeholder={
-                  locale === "ko"
-                    ? "메인페이지 타이틀을 입력하세요"
-                    : "Enter the homepage hero title"
-                }
+                id="heroTitle"
+                name="heroTitle"
+                defaultValue={hero.title}
+                required
+                maxLength={120}
                 className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
               />
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-[#704d39]">
+              <label
+                htmlFor="heroDescription"
+                className="mb-2 block text-sm font-medium text-[#704d39]"
+              >
                 {locale === "ko" ? "설명 문구" : "Description"}
               </label>
               <textarea
+                id="heroDescription"
+                name="heroDescription"
                 rows={5}
-                placeholder={
-                  locale === "ko"
-                    ? "메인 설명 문구를 입력하세요"
-                    : "Enter the homepage description"
-                }
+                defaultValue={hero.description}
+                required
+                maxLength={700}
                 className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
               />
             </div>
 
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label
+                  htmlFor="heroPrimaryCta"
+                  className="mb-2 block text-sm font-medium text-[#704d39]"
+                >
+                  {locale === "ko" ? "주요 버튼 문구" : "Primary CTA"}
+                </label>
+                <input
+                  id="heroPrimaryCta"
+                  name="heroPrimaryCta"
+                  defaultValue={hero.primaryCta}
+                  required
+                  maxLength={40}
+                  className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="heroSecondaryCta"
+                  className="mb-2 block text-sm font-medium text-[#704d39]"
+                >
+                  {locale === "ko" ? "보조 버튼 문구" : "Secondary CTA"}
+                </label>
+                <input
+                  id="heroSecondaryCta"
+                  name="heroSecondaryCta"
+                  defaultValue={hero.secondaryCta}
+                  required
+                  maxLength={40}
+                  className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
+                />
+              </div>
+            </div>
+
             <button
-              type="button"
+              type="submit"
               className="rounded-full bg-[#2b170f] px-6 py-3 text-sm font-semibold text-[#fff8f2]"
             >
-              {locale === "ko" ? "저장(준비중)" : "Save (coming soon)"}
+              {locale === "ko" ? "메인 콘텐츠 저장" : "Save Home Content"}
             </button>
           </form>
         </article>
 
         <aside className="rounded-[32px] bg-[linear-gradient(145deg,#2f1b11_0%,#8d6045_55%,#e3c4ad_100%)] p-7 text-[#fff8f3] shadow-[0_18px_40px_rgba(58,31,20,0.25)] sm:p-8">
           <p className="text-xs uppercase tracking-[0.24em] text-white/70">
-            Content Roadmap
+            Content Status
           </p>
-          <ul className="mt-5 space-y-3 text-sm leading-7 text-white/85">
-            <li>
+          <div className="mt-5 rounded-2xl bg-white/12 p-4 text-sm text-white/85">
+            <p>
               {locale === "ko"
-                ? "1. 메인 페이지 텍스트를 DB 기반으로 분리"
-                : "1. Split homepage text into DB-backed fields"}
-            </li>
-            <li>
+                ? `Supabase 연결: ${isConfigured ? "완료" : "미설정"}`
+                : `Supabase connection: ${isConfigured ? "ready" : "not configured"}`}
+            </p>
+            <p className="mt-2">
               {locale === "ko"
-                ? "2. 한/영 콘텐츠를 개별 저장"
-                : "2. Store Korean and English content separately"}
-            </li>
-            <li>
-              {locale === "ko"
-                ? "3. 저장 후 메인에 즉시 반영"
-                : "3. Reflect updates on main pages after save"}
-            </li>
-          </ul>
+                ? `현재 데이터 소스: ${hero.source === "database" ? "DB" : "기본값"}`
+                : `Current data source: ${hero.source === "database" ? "database" : "fallback"}`}
+            </p>
+          </div>
+
+          <p className="mt-6 text-xs uppercase tracking-[0.24em] text-white/70">
+            SQL
+          </p>
+          <pre className="mt-3 overflow-x-auto rounded-2xl bg-[#1f120c]/70 p-4 text-xs leading-6 text-white/85">
+{`create table if not exists public.site_home_content (
+  locale text primary key,
+  hero_title text not null,
+  hero_description text not null,
+  primary_cta text not null,
+  secondary_cta text not null,
+  updated_at timestamptz not null default now()
+);`}
+          </pre>
         </aside>
       </section>
     </main>

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { LocaleSwitch } from "@/components/locale-switch";
+import { getHomeHeroContent } from "@/lib/home-content";
 import { getDictionary, isLocale } from "@/lib/i18n";
 
 export default async function LocalizedHomePage({
@@ -16,6 +17,12 @@ export default async function LocalizedHomePage({
   }
 
   const dict = getDictionary(locale);
+  const hero = await getHomeHeroContent(locale, {
+    title: dict.hero.title,
+    description: dict.hero.description,
+    primaryCta: dict.hero.primary,
+    secondaryCta: dict.hero.secondary,
+  });
 
   return (
     <main className="px-6 pb-16 pt-6 sm:px-10 lg:px-14">
@@ -49,10 +56,10 @@ export default async function LocalizedHomePage({
                 {dict.hero.eyebrow}
               </p>
               <h2 className="max-w-3xl font-display text-5xl leading-[0.95] text-[#2a170f] sm:text-6xl">
-                {dict.hero.title}
+                {hero.title}
               </h2>
               <p className="max-w-2xl text-base leading-8 text-[#5e4638] sm:text-lg">
-                {dict.hero.description}
+                {hero.description}
               </p>
             </div>
 
@@ -61,13 +68,13 @@ export default async function LocalizedHomePage({
                 href="#contact"
                 className="inline-flex items-center justify-center rounded-full bg-[#2b170f] px-6 py-4 text-sm font-semibold text-[#fff7f1] transition hover:bg-[#4a2c1f]"
               >
-                {dict.hero.primary}
+                {hero.primaryCta}
               </a>
               <a
                 href="#programs"
                 className="inline-flex items-center justify-center rounded-full border border-[#cfb8a6] px-6 py-4 text-sm font-semibold text-[#6d4835] transition hover:border-[#8f5f42] hover:text-[#8f5f42]"
               >
-                {dict.hero.secondary}
+                {hero.secondaryCta}
               </a>
             </div>
           </div>

@@ -51,11 +51,29 @@ Create `.env.local` and set:
 ADMIN_LOGIN_ID=your-admin-id
 ADMIN_LOGIN_PASSWORD=your-admin-password
 ADMIN_SESSION_SECRET=replace-with-a-long-random-secret
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 ```
 
 Notes:
 - Admin login is disabled when these values are missing.
 - Use a strong random value for `ADMIN_SESSION_SECRET`.
+- `SUPABASE_SERVICE_ROLE_KEY` is server-only and must never be exposed on client.
+
+## Supabase Table
+
+Create this table before using Admin Content save:
+
+```sql
+create table if not exists public.site_home_content (
+  locale text primary key,
+  hero_title text not null,
+  hero_description text not null,
+  primary_cta text not null,
+  secondary_cta text not null,
+  updated_at timestamptz not null default now()
+);
+```
 
 ## Initial Route Draft
 
