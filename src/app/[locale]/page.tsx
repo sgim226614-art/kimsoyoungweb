@@ -48,7 +48,7 @@ export default async function LocalizedHomePage({
 
           <nav className="flex flex-wrap items-center gap-3 text-sm text-[#7b5a48]">
             <a href="#about">{dict.nav.about}</a>
-            <a href="#programs">{dict.nav.programs}</a>
+            <a href="#portfolio">{dict.nav.programs}</a>
             <a href="#reviews">{dict.nav.reviews}</a>
             <Link href={`/${locale}/admin/login`}>{dict.nav.admin}</Link>
             <LocaleSwitch
@@ -80,7 +80,7 @@ export default async function LocalizedHomePage({
                 {content.primaryCta}
               </a>
               <a
-                href="#programs"
+                href="#portfolio"
                 className="inline-flex items-center justify-center rounded-full border border-[#cfb8a6] px-6 py-4 text-sm font-semibold text-[#6d4835] transition hover:border-[#8f5f42] hover:text-[#8f5f42]"
               >
                 {content.secondaryCta}
@@ -123,12 +123,12 @@ export default async function LocalizedHomePage({
         </div>
       </section>
 
-      <section id="programs" className="mx-auto mt-8 w-full max-w-7xl">
+      <section id="portfolio" className="mx-auto mt-8 w-full max-w-7xl">
         <div className="rounded-[32px] border border-[#ead9ca] bg-white/70 p-8 shadow-[0_20px_60px_rgba(93,61,42,0.08)]">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-xs uppercase tracking-[0.28em] text-[#ae7b59]">
-                Programs
+                Portfolio
               </p>
               <h3 className="mt-3 font-display text-4xl text-[#2b1810]">
                 {dict.sections.programs.title}
@@ -136,19 +136,31 @@ export default async function LocalizedHomePage({
             </div>
           </div>
 
-          <div className="mt-8 grid gap-5 lg:grid-cols-3">
-            {content.programs.map((item) => (
-              <article
-                key={item.title}
-                className="rounded-[26px] bg-[#f8f0e8] p-6 text-[#4f392c]"
-              >
-                <p className="text-sm uppercase tracking-[0.24em] text-[#ab7b58]">
-                  Program
-                </p>
-                <h4 className="mt-4 text-2xl font-semibold">{item.title}</h4>
-                <p className="mt-4 leading-7">{item.description}</p>
-              </article>
-            ))}
+          <div className="mt-8 grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
+            <article className="rounded-[26px] bg-[linear-gradient(145deg,#2f1b11_0%,#8f6045_58%,#ebc9b1_100%)] p-7 text-[#fff8f3] shadow-[0_16px_42px_rgba(65,36,24,0.35)]">
+              <p className="text-sm uppercase tracking-[0.28em] text-white/75">01</p>
+              <h4 className="mt-4 font-display text-4xl leading-none">
+                {content.programs[0].title}
+              </h4>
+              <p className="mt-5 max-w-2xl text-sm leading-7 text-white/86">
+                {content.programs[0].description}
+              </p>
+            </article>
+
+            <div className="grid gap-5">
+              {content.programs.slice(1).map((item, index) => (
+                <article
+                  key={item.title}
+                  className="rounded-[24px] bg-[#f8f0e8] p-6 text-[#4f392c] transition hover:-translate-y-1 hover:shadow-[0_14px_30px_rgba(92,60,41,0.14)]"
+                >
+                  <p className="text-sm uppercase tracking-[0.24em] text-[#ab7b58]">
+                    0{index + 2}
+                  </p>
+                  <h4 className="mt-3 text-2xl font-semibold">{item.title}</h4>
+                  <p className="mt-3 leading-7">{item.description}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </section>

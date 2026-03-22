@@ -58,7 +58,7 @@ const dictionaries: Record<Locale, Dictionary> = {
   ko: {
     nav: {
       about: "소개",
-      programs: "프로그램",
+      programs: "포트폴리오",
       reviews: "학부모 후기",
       admin: "어드민",
     },
@@ -79,19 +79,22 @@ const dictionaries: Record<Locale, Dictionary> = {
         body: "지식을 빠르게 주입하기보다, 학생이 스스로 이해하고 설명할 수 있을 때까지 구조를 다시 세우는 방식으로 지도합니다.",
       },
       programs: {
-        title: "운영 프로그램",
+        title: "포트폴리오",
         items: [
           {
-            title: "기초 개념 클리닉",
-            description: "막힌 개념을 정확히 짚고 기초를 안정적으로 재정비합니다.",
+            title: "초등 5학년 수학 성장 기록",
+            description:
+              "개념 재정비 8주 프로그램을 통해 오답률을 낮추고 풀이 설명력을 개선한 사례입니다.",
           },
           {
-            title: "학교 내신 대비",
-            description: "학교 진도와 시험 범위에 맞춰 핵심 문제 풀이와 오답 관리를 진행합니다.",
+            title: "중등 내신 대비 학습 코칭",
+            description:
+              "시험 전 4주 집중 설계로 취약 단원을 보완하고 실전형 문제 접근을 구축한 사례입니다.",
           },
           {
-            title: "학습 습관 코칭",
-            description: "공부 루틴, 복습 방법, 자기주도 학습 흐름까지 함께 설계합니다.",
+            title: "자기주도 루틴 설계 프로젝트",
+            description:
+              "주간 학습 루틴과 복습 체계를 맞춤 설계해 학습 지속률을 높인 코칭 포트폴리오입니다.",
           },
         ],
       },
@@ -128,7 +131,7 @@ const dictionaries: Record<Locale, Dictionary> = {
   en: {
     nav: {
       about: "About",
-      programs: "Programs",
+      programs: "Portfolio",
       reviews: "Reviews",
       admin: "Admin",
     },
@@ -149,22 +152,22 @@ const dictionaries: Record<Locale, Dictionary> = {
         body: "Instead of rushing through content, lessons are structured until each student can truly explain what they learned with confidence.",
       },
       programs: {
-        title: "Programs",
+        title: "Portfolio",
         items: [
           {
-            title: "Foundation Concept Clinic",
+            title: "Grade 5 Math Growth Case",
             description:
-              "Rebuild weak concepts carefully and strengthen the basics with clarity.",
+              "An 8-week concept reset that improved clarity, explanation skills, and error reduction.",
           },
           {
-            title: "School Exam Preparation",
+            title: "Middle School Exam Prep Coaching",
             description:
-              "Match school progress and test scope with targeted practice and review.",
+              "A focused 4-week plan that strengthened weak units and test-ready problem solving.",
           },
           {
-            title: "Study Habit Coaching",
+            title: "Self-Directed Routine Design",
             description:
-              "Shape routines, revision methods, and self-directed study habits together.",
+              "A personalized study routine and review system that improved consistency and retention.",
           },
         ],
       },

@@ -305,14 +305,16 @@ export default async function AdminContentPage({
 
             <div className="space-y-4">
               <p className="text-sm font-semibold text-[#6f4b39]">
-                {locale === "ko" ? "프로그램 카드" : "Program Cards"}
+                {locale === "ko" ? "포트폴리오 카드" : "Portfolio Cards"}
               </p>
               {content.programs.map((program, index) => {
                 const order = index + 1;
                 return (
                   <div key={`program-${order}`} className="space-y-3">
                     <p className="text-xs uppercase tracking-[0.24em] text-[#b08160]">
-                      {locale === "ko" ? `프로그램 ${order}` : `Program ${order}`}
+                      {locale === "ko"
+                        ? `포트폴리오 ${order}`
+                        : `Portfolio ${order}`}
                     </p>
                     <input
                       name={`programTitle${order}`}
