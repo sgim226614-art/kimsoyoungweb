@@ -26,6 +26,8 @@ export default async function LocalizedHomePage({
     aboutBody: dict.sections.philosophy.body,
     contactTitle: dict.sections.contact.title,
     contactBody: dict.sections.contact.body,
+    programs: dict.sections.programs.items,
+    reviews: dict.sections.reviews.items,
   });
 
   return (
@@ -136,7 +138,7 @@ export default async function LocalizedHomePage({
           </div>
 
           <div className="mt-8 grid gap-5 lg:grid-cols-3">
-            {dict.sections.programs.items.map((item) => (
+            {content.programs.map((item) => (
               <article
                 key={item.title}
                 className="rounded-[26px] bg-[#f8f0e8] p-6 text-[#4f392c]"
@@ -154,7 +156,7 @@ export default async function LocalizedHomePage({
 
       <section id="reviews" className="mx-auto mt-8 w-full max-w-7xl">
         <div className="grid gap-5 lg:grid-cols-3">
-          {dict.sections.reviews.items.map((item, index) => (
+          {content.reviews.map((item, index) => (
             <article
               key={item}
               className="rounded-[28px] border border-[#e9d8ca] bg-white/80 p-7 shadow-[0_16px_40px_rgba(96,67,46,0.08)]"

@@ -75,6 +75,8 @@ create table if not exists public.site_home_content (
   about_body text not null,
   contact_title text not null,
   contact_body text not null,
+  programs_json jsonb not null default '[]'::jsonb,
+  reviews_json jsonb not null default '[]'::jsonb,
   updated_at timestamptz not null default now()
 );
 ```

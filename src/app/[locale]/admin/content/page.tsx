@@ -37,6 +37,8 @@ export default async function AdminContentPage({
     aboutBody: dict.sections.philosophy.body,
     contactTitle: dict.sections.contact.title,
     contactBody: dict.sections.contact.body,
+    programs: dict.sections.programs.items,
+    reviews: dict.sections.reviews.items,
   });
 
   const savedText =
@@ -242,6 +244,65 @@ export default async function AdminContentPage({
               />
             </div>
 
+            <div className="h-px bg-[#ecdccd]" />
+
+            <div className="space-y-4">
+              <p className="text-sm font-semibold text-[#6f4b39]">
+                {locale === "ko" ? "프로그램 카드" : "Program Cards"}
+              </p>
+              {content.programs.map((program, index) => {
+                const order = index + 1;
+                return (
+                  <div key={`program-${order}`} className="space-y-3">
+                    <p className="text-xs uppercase tracking-[0.24em] text-[#b08160]">
+                      {locale === "ko" ? `프로그램 ${order}` : `Program ${order}`}
+                    </p>
+                    <input
+                      name={`programTitle${order}`}
+                      defaultValue={program.title}
+                      required
+                      maxLength={120}
+                      className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
+                    />
+                    <textarea
+                      name={`programDescription${order}`}
+                      rows={3}
+                      defaultValue={program.description}
+                      required
+                      maxLength={500}
+                      className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
+                    />
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="h-px bg-[#ecdccd]" />
+
+            <div className="space-y-4">
+              <p className="text-sm font-semibold text-[#6f4b39]">
+                {locale === "ko" ? "후기 카드" : "Review Cards"}
+              </p>
+              {content.reviews.map((review, index) => {
+                const order = index + 1;
+                return (
+                  <div key={`review-${order}`} className="space-y-2">
+                    <p className="text-xs uppercase tracking-[0.24em] text-[#b08160]">
+                      {locale === "ko" ? `후기 ${order}` : `Review ${order}`}
+                    </p>
+                    <textarea
+                      name={`reviewText${order}`}
+                      rows={3}
+                      defaultValue={review}
+                      required
+                      maxLength={500}
+                      className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
+                    />
+                  </div>
+                );
+              })}
+            </div>
+
             <button
               type="submit"
               className="rounded-full bg-[#2b170f] px-6 py-3 text-sm font-semibold text-[#fff8f2]"
@@ -282,6 +343,8 @@ export default async function AdminContentPage({
   about_body text not null,
   contact_title text not null,
   contact_body text not null,
+  programs_json jsonb not null default '[]'::jsonb,
+  reviews_json jsonb not null default '[]'::jsonb,
   updated_at timestamptz not null default now()
 );`}
           </pre>

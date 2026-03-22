@@ -4,12 +4,39 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { isAdminAuthenticated } from "@/lib/auth";
-import { type HomeContentInput, saveHomeContent } from "@/lib/home-content";
+import {
+  type HomeContentInput,
+  type ProgramItem,
+  saveHomeContent,
+} from "@/lib/home-content";
 import { isLocale } from "@/lib/i18n";
 
 function readText(formData: FormData, key: string) {
   const value = formData.get(key);
   return typeof value === "string" ? value.trim() : "";
+}
+
+function readPrograms(formData: FormData) {
+  const programs: ProgramItem[] = [];
+
+  for (let i = 1; i <= 3; i += 1) {
+    programs.push({
+      title: readText(formData, `programTitle${i}`),
+      description: readText(formData, `programDescription${i}`),
+    });
+  }
+
+  return programs;
+}
+
+function readReviews(formData: FormData) {
+  const reviews: string[] = [];
+
+  for (let i = 1; i <= 3; i += 1) {
+    reviews.push(readText(formData, `reviewText${i}`));
+  }
+
+  return reviews;
 }
 
 function validatePayload(payload: HomeContentInput) {
@@ -45,6 +72,30 @@ function validatePayload(payload: HomeContentInput) {
     return false;
   }
 
+  if (payload.programs.length !== 3) {
+    return false;
+  }
+
+  for (const program of payload.programs) {
+    if (!program.title || program.title.length > 120) {
+      return false;
+    }
+
+    if (!program.description || program.description.length > 500) {
+      return false;
+    }
+  }
+
+  if (payload.reviews.length !== 3) {
+    return false;
+  }
+
+  for (const review of payload.reviews) {
+    if (!review || review.length > 500) {
+      return false;
+    }
+  }
+
   return true;
 }
 
@@ -68,6 +119,8 @@ export async function saveHomeContentAction(formData: FormData) {
     aboutBody: readText(formData, "aboutBody"),
     contactTitle: readText(formData, "contactTitle"),
     contactBody: readText(formData, "contactBody"),
+    programs: readPrograms(formData),
+    reviews: readReviews(formData),
   };
 
   if (!validatePayload(payload)) {

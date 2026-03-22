@@ -1,6 +1,11 @@
 import type { Locale } from "@/lib/i18n";
 import { getSupabaseAdminClient } from "@/lib/supabase-admin";
 
+export type ProgramItem = {
+  title: string;
+  description: string;
+};
+
 export type HomeContentInput = {
   heroTitle: string;
   heroDescription: string;
@@ -10,6 +15,8 @@ export type HomeContentInput = {
   aboutBody: string;
   contactTitle: string;
   contactBody: string;
+  programs: ProgramItem[];
+  reviews: string[];
 };
 
 export type HomeContent = HomeContentInput & {
@@ -30,8 +37,50 @@ type HomeContentRow = {
   about_body: string;
   contact_title: string;
   contact_body: string;
+  programs_json: unknown;
+  reviews_json: unknown;
   updated_at: string;
 };
+
+function readString(value: unknown, fallback: string) {
+  if (typeof value !== "string") {
+    return fallback;
+  }
+
+  const trimmed = value.trim();
+  return trimmed || fallback;
+}
+
+function normalizePrograms(value: unknown, fallback: ProgramItem[]) {
+  if (!Array.isArray(value)) {
+    return fallback;
+  }
+
+  const result = fallback.map((item, index) => {
+    const raw = value[index];
+
+    if (typeof raw !== "object" || raw === null) {
+      return item;
+    }
+
+    const record = raw as { title?: unknown; description?: unknown };
+
+    return {
+      title: readString(record.title, item.title),
+      description: readString(record.description, item.description),
+    };
+  });
+
+  return result;
+}
+
+function normalizeReviews(value: unknown, fallback: string[]) {
+  if (!Array.isArray(value)) {
+    return fallback;
+  }
+
+  return fallback.map((item, index) => readString(value[index], item));
+}
 
 export async function getHomeContent(
   locale: Locale,
@@ -46,7 +95,7 @@ export async function getHomeContent(
   const { data, error } = await supabase
     .from("site_home_content")
     .select(
-      "locale, hero_title, hero_description, primary_cta, secondary_cta, about_title, about_body, contact_title, contact_body, updated_at",
+      "locale, hero_title, hero_description, primary_cta, secondary_cta, about_title, about_body, contact_title, contact_body, programs_json, reviews_json, updated_at",
     )
     .eq("locale", locale)
     .maybeSingle<HomeContentRow>();
@@ -64,6 +113,8 @@ export async function getHomeContent(
     aboutBody: data.about_body || fallback.aboutBody,
     contactTitle: data.contact_title || fallback.contactTitle,
     contactBody: data.contact_body || fallback.contactBody,
+    programs: normalizePrograms(data.programs_json, fallback.programs),
+    reviews: normalizeReviews(data.reviews_json, fallback.reviews),
     source: "database",
   };
 }
@@ -89,6 +140,8 @@ export async function saveHomeContent(
       about_body: payload.aboutBody,
       contact_title: payload.contactTitle,
       contact_body: payload.contactBody,
+      programs_json: payload.programs,
+      reviews_json: payload.reviews,
       updated_at: new Date().toISOString(),
     },
     { onConflict: "locale" },
