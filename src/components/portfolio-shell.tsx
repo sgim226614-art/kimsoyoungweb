@@ -33,8 +33,8 @@ export function PortfolioShell({
   return (
     <div className="portfolio-noise relative isolate min-h-screen bg-[#020202] text-white">
       <header className="sticky top-0 z-30 bg-black/92 backdrop-blur">
-        <div className="relative mx-auto flex h-20 w-full max-w-7xl items-center px-4 sm:px-8">
-          <nav className="absolute left-1/2 flex -translate-x-1/2 items-center gap-x-7 text-[18px] tracking-[-0.01em] md:gap-x-9 md:text-[19px] lg:gap-x-11">
+        <div className="relative mx-auto flex h-[84px] w-full max-w-7xl items-center px-4 sm:px-8">
+          <nav className="absolute left-1/2 flex -translate-x-1/2 items-center gap-x-7 font-medium text-[18px] leading-none tracking-[-0.01em] md:gap-x-9 md:text-[19px] lg:gap-x-11">
             {menuItems.map((item) => {
               const isActive = item.slug === activeSlug;
 
@@ -56,7 +56,7 @@ export function PortfolioShell({
 
           <LocaleSwitch
             locale={locale}
-            className="ml-auto rounded-full border border-white/38 px-3 py-1 text-xs tracking-[0.08em] text-white/88 transition hover:border-white hover:text-white"
+            className="ml-auto rounded-full border border-white/38 px-3 py-1 text-[12px] font-medium tracking-[0.06em] text-white/88 transition hover:border-white hover:text-white"
           />
         </div>
       </header>
