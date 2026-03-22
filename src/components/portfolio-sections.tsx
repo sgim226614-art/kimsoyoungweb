@@ -141,13 +141,12 @@ function DeviceMock({
 
 function HeroCard({ content }: { content: PortfolioContent }) {
   const HERO_VIEW_WIDTH = 2560;
-  const HERO_ZOOM = 1.45;
 
   return (
     <section className="w-full overflow-hidden">
       <div
         className="relative left-1/2 max-w-none -translate-x-1/2"
-        style={{ width: `${HERO_VIEW_WIDTH * HERO_ZOOM}px` }}
+        style={{ width: `${HERO_VIEW_WIDTH}px` }}
       >
         <Image
           src="/assets/메인화면 1.png"
