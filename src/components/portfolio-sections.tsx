@@ -140,18 +140,18 @@ function DeviceMock({
 
 function HeroCard({ content }: { content: PortfolioContent }) {
   return (
-    <section className="mx-auto w-full max-w-[1440px] px-4 pt-5 sm:px-8 sm:pt-8">
-      <div className="relative h-[560px] overflow-hidden rounded-[10px] sm:h-[760px]">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_84%_at_50%_-12%,rgba(255,255,255,0.2)_0%,rgba(18,18,18,0)_58%)]" />
-        <div className="pointer-events-none absolute inset-x-[22%] top-[-130px] h-[450px] bg-[radial-gradient(circle,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.01)_45%,transparent_70%)] blur-[44px]" />
+    <section className="mx-auto w-full max-w-[1411px] px-4 pt-4 sm:px-8 sm:pt-6">
+      <div className="relative aspect-[1411/1216] w-full overflow-hidden rounded-[8px] bg-[linear-gradient(180deg,#070707_0%,#050505_100%)]">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(100%_70%_at_50%_0%,rgba(255,255,255,0.16)_0%,rgba(255,255,255,0.02)_48%,transparent_72%)]" />
+        <div className="pointer-events-none absolute inset-x-[31%] top-[-16%] h-[45%] bg-[radial-gradient(circle,rgba(230,230,230,0.3)_0%,rgba(255,255,255,0.05)_36%,transparent_72%)] blur-[52px]" />
 
-        <div className="absolute bottom-[102px] left-1/2 w-[min(92%,780px)] -translate-x-1/2 sm:bottom-[138px]">
-          <div className="rounded-[20px] border border-white/22 bg-[linear-gradient(180deg,rgba(10,10,10,0.94)_0%,rgba(3,3,3,0.95)_100%)] px-4 py-4 shadow-[0_36px_78px_rgba(0,0,0,0.8)] sm:px-5 sm:py-5">
-            <h1 className="text-[50px] font-semibold leading-none tracking-[-0.03em] text-[#d30000] sm:text-[84px]">
+        <div className="absolute left-1/2 top-[31%] w-[52.5%] -translate-x-1/2">
+          <div className="rounded-[18px] border border-white/24 bg-[linear-gradient(180deg,rgba(8,8,8,0.95)_0%,rgba(4,4,4,0.96)_100%)] px-[2.1%] py-[2.2%] shadow-[0_30px_74px_rgba(0,0,0,0.78)]">
+            <h1 className="text-[clamp(30px,5.8vw,112px)] font-semibold leading-none tracking-[-0.03em] text-[#cf0000]">
               {content.heroTitle}
             </h1>
 
-            <div className="mt-3 grid gap-x-3 gap-y-2 text-[10px] leading-[1.35] text-white/86 sm:grid-cols-4 sm:text-[12px] sm:leading-[1.32]">
+            <div className="mt-[2.1%] grid gap-x-[1.8%] gap-y-[0.7%] text-[clamp(8px,0.8vw,12px)] leading-[1.4] text-white/86 sm:grid-cols-4">
               <div>
                 <p className="border-t border-white/42 pt-1">Main</p>
                 <p>Major in Graphic Design</p>
@@ -173,17 +173,17 @@ function HeroCard({ content }: { content: PortfolioContent }) {
               </div>
             </div>
 
-            <p className="mt-7 text-right font-display text-[54px] font-semibold leading-none text-[#bbc0c6] sm:mt-14 sm:text-[96px]">
+            <p className="mt-[9%] text-right font-display text-[clamp(38px,5.7vw,108px)] font-semibold leading-none tracking-[-0.01em] text-[#bbc0c6]">
               {content.heroSubtitle}
             </p>
           </div>
 
-          <div className="mx-auto -mt-2 h-[18px] w-[94%] rounded-[100%] bg-[radial-gradient(circle_at_center,rgba(195,195,195,0.35)_0%,rgba(24,24,24,0.95)_74%)] blur-[1.1px]" />
+          <div className="mx-auto -mt-[0.8%] h-[1.8%] w-[92%] rounded-[100%] bg-[radial-gradient(circle_at_center,rgba(195,195,195,0.34)_0%,rgba(24,24,24,0.95)_76%)] blur-[1px]" />
         </div>
 
-        <div className="pointer-events-none absolute bottom-0 left-1/2 h-[124px] w-[58%] -translate-x-1/2 bg-[linear-gradient(180deg,#1b1b1b_0%,#0a0a0a_100%)]" />
-        <div className="pointer-events-none absolute bottom-0 left-0 h-[104px] w-[35%] bg-[linear-gradient(180deg,#171717_0%,#070707_100%)]" />
-        <div className="pointer-events-none absolute bottom-0 right-0 h-[130px] w-[34%] bg-[linear-gradient(180deg,#202020_0%,#090909_100%)]" />
+        <div className="pointer-events-none absolute bottom-0 left-[17%] h-[8.8%] w-[66%] bg-[linear-gradient(180deg,#161616_0%,#0a0a0a_100%)]" />
+        <div className="pointer-events-none absolute bottom-0 left-0 h-[7.6%] w-[38%] bg-[linear-gradient(180deg,#131313_0%,#060606_100%)]" />
+        <div className="pointer-events-none absolute bottom-0 right-0 h-[9.2%] w-[34%] bg-[linear-gradient(180deg,#1e1e1e_0%,#080808_100%)]" />
       </div>
     </section>
   );
