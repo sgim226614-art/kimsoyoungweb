@@ -32,9 +32,9 @@ export function PortfolioShell({
 
   return (
     <div className="portfolio-noise relative isolate min-h-screen bg-[#020202] text-white">
-      <header className="sticky top-0 z-30 border-b border-white/10 bg-black/88 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-8">
-          <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] tracking-[0.18em] sm:text-xs">
+      <header className="sticky top-0 z-30 bg-black/92 backdrop-blur">
+        <div className="relative mx-auto flex h-20 w-full max-w-7xl items-center px-4 sm:px-8">
+          <nav className="absolute left-1/2 flex -translate-x-1/2 items-center gap-x-7 text-[18px] tracking-[-0.01em] md:gap-x-9 md:text-[19px] lg:gap-x-11">
             {menuItems.map((item) => {
               const isActive = item.slug === activeSlug;
 
@@ -44,8 +44,8 @@ export function PortfolioShell({
                   href={getPortfolioHref(locale, item.slug)}
                   className={
                     isActive
-                      ? "text-white"
-                      : "text-white/72 transition hover:text-white"
+                      ? "whitespace-nowrap text-white"
+                      : "whitespace-nowrap text-white/92 transition hover:text-white"
                   }
                 >
                   {item.label}
@@ -56,7 +56,7 @@ export function PortfolioShell({
 
           <LocaleSwitch
             locale={locale}
-            className="rounded-full border border-white/35 px-3 py-1 text-xs text-white/80 transition hover:border-white hover:text-white"
+            className="ml-auto rounded-full border border-white/38 px-3 py-1 text-xs tracking-[0.08em] text-white/88 transition hover:border-white hover:text-white"
           />
         </div>
       </header>
