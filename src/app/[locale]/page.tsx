@@ -23,7 +23,7 @@ export default async function LocalizedHomePage({
 
   return (
     <PortfolioShell locale={rawLocale} content={content} activeSlug="main">
-      <PortfolioHeroSection content={content} />
+      <PortfolioHeroSection content={content} locale={rawLocale} />
       <PortfolioMainShowcase content={content} locale={rawLocale} />
     </PortfolioShell>
   );
