@@ -141,8 +141,8 @@ function DeviceMock({
 
 function HeroCard({ content }: { content: PortfolioContent }) {
   return (
-    <section className="w-full">
-      <div className="mx-auto w-full max-w-[1440px] overflow-hidden">
+    <section className="w-full px-5 pt-2 sm:px-10 lg:px-14">
+      <div className="mx-auto w-full max-w-[1240px] overflow-hidden rounded-[8px]">
         <Image
           src="/assets/메인화면 1.png"
           alt={`${content.heroTitle} ${content.heroSubtitle}`}
@@ -151,7 +151,7 @@ function HeroCard({ content }: { content: PortfolioContent }) {
           priority
           unoptimized
           className="h-auto w-full"
-          sizes="(max-width: 1440px) 100vw, 1440px"
+          sizes="(max-width: 768px) calc(100vw - 40px), (max-width: 1440px) calc(100vw - 80px), 1240px"
         />
       </div>
     </section>
