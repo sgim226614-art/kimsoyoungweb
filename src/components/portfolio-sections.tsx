@@ -138,32 +138,52 @@ function DeviceMock({
   );
 }
 
-function HeroCard({ content, copy }: { content: PortfolioContent; copy: MainCopy }) {
+function HeroCard({ content }: { content: PortfolioContent }) {
   return (
-    <section className="mx-auto w-full max-w-7xl px-4 pt-8 sm:px-8 sm:pt-12">
-      <div className="mx-auto max-w-[760px]">
-        <div className="rounded-[12px] border border-white/22 bg-[linear-gradient(180deg,rgba(20,20,20,0.84)_0%,rgba(8,8,8,0.92)_100%)] px-5 py-6 sm:px-9 sm:py-8">
-          <h1 className="text-4xl font-semibold tracking-tight text-[#f11212] sm:text-7xl">
-            {content.heroTitle}
-          </h1>
-          <div className="mt-3 h-px bg-white/26" />
-          <div className="mt-2 grid gap-3 sm:grid-cols-[1.1fr_1fr]">
-            <p className="text-[10px] tracking-[0.26em] text-white/52 sm:text-[11px]">
-              {copy.heroMeta}
-            </p>
-            <div className="grid grid-cols-2 gap-x-3 gap-y-1">
-              {copy.heroTags.map((tag) => (
-                <p key={tag} className="text-[10px] text-white/58">
-                  {tag}
-                </p>
-              ))}
+    <section className="mx-auto w-full max-w-[1440px] px-4 pt-5 sm:px-8 sm:pt-8">
+      <div className="relative h-[520px] overflow-hidden rounded-[10px] sm:h-[700px]">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_-8%,rgba(230,230,230,0.18)_0%,rgba(22,22,22,0.0)_56%)]" />
+        <div className="pointer-events-none absolute inset-x-[18%] top-[-110px] h-[420px] bg-[radial-gradient(circle,rgba(255,255,255,0.16)_0%,rgba(255,255,255,0.02)_40%,transparent_68%)] blur-[42px]" />
+
+        <div className="absolute bottom-[88px] left-1/2 w-[min(92%,730px)] -translate-x-1/2 sm:bottom-[124px]">
+          <div className="rounded-[20px] border border-white/24 bg-[linear-gradient(180deg,rgba(11,11,11,0.95)_0%,rgba(5,5,5,0.95)_100%)] px-3 py-4 shadow-[0_32px_70px_rgba(0,0,0,0.75)] sm:px-5 sm:py-5">
+            <h1 className="text-[54px] font-semibold leading-none tracking-[-0.03em] text-[#d30000] sm:text-[86px]">
+              {content.heroTitle}
+            </h1>
+
+            <div className="mt-3 grid gap-3 text-[11px] leading-5 text-white/86 sm:grid-cols-4 sm:gap-3 sm:text-[29px] sm:leading-[1.62]">
+              <div>
+                <p className="border-t border-white/42 pt-1">Main</p>
+                <p>Major in Graphic Design</p>
+              </div>
+              <div>
+                <p className="border-t border-white/42 pt-1">Marketing Design</p>
+                <p>Social Media Design</p>
+                <p>Social Media Design</p>
+                <p>Advertising Design</p>
+                <p>Logo Design</p>
+              </div>
+              <div>
+                <p className="border-t border-white/42 pt-1">Print Design Designe</p>
+              </div>
+              <div>
+                <p className="border-t border-white/42 pt-1">UX/UI Design</p>
+                <p>Web Design</p>
+                <p>App Design</p>
+              </div>
             </div>
+
+            <p className="mt-8 text-right font-display text-[54px] font-semibold leading-none text-[#c4c8ce] sm:mt-16 sm:text-[96px]">
+              {content.heroSubtitle}
+            </p>
           </div>
+
+          <div className="mx-auto -mt-2 h-[16px] w-[92%] rounded-[100%] bg-[radial-gradient(circle_at_center,rgba(190,190,190,0.35)_0%,rgba(23,23,23,0.95)_72%)] blur-[1.2px]" />
         </div>
-        <div className="mx-auto -mt-2 h-8 w-[88%] rounded-[100%] bg-black shadow-[0_28px_50px_rgba(0,0,0,0.9)]" />
-        <p className="mt-1 text-center font-display text-5xl text-white/90 sm:text-6xl">
-          {content.heroSubtitle}
-        </p>
+
+        <div className="pointer-events-none absolute bottom-0 left-1/2 h-[116px] w-[54%] -translate-x-1/2 bg-[linear-gradient(180deg,#1a1a1a_0%,#0a0a0a_100%)]" />
+        <div className="pointer-events-none absolute bottom-0 left-0 h-[102px] w-[38%] bg-[linear-gradient(180deg,#161616_0%,#070707_100%)]" />
+        <div className="pointer-events-none absolute bottom-0 right-0 h-[126px] w-[36%] bg-[linear-gradient(180deg,#1f1f1f_0%,#090909_100%)]" />
       </div>
     </section>
   );
@@ -277,9 +297,9 @@ export function PortfolioHeroSection({
   content: PortfolioContent;
   locale: Locale;
 }) {
-  const copy = getMainCopy(locale);
+  void locale;
 
-  return <HeroCard content={content} copy={copy} />;
+  return <HeroCard content={content} />;
 }
 
 export function PortfolioMainShowcase({
