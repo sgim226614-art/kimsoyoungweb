@@ -20,10 +20,14 @@ export default async function AdminLoginPage({
   }
 
   const dict = getDictionary(locale);
-  const helperText =
+  const invalidMessage =
     locale === "ko"
-      ? "기본 개발 계정은 admin / changeme123! 입니다."
-      : "The default development account is admin / changeme123!.";
+      ? "아이디 또는 비밀번호가 맞지 않습니다."
+      : "The ID or password is incorrect.";
+  const configMessage =
+    locale === "ko"
+      ? "어드민 인증 설정이 완료되지 않았습니다. .env.local 설정을 확인해주세요."
+      : "Admin auth is not configured yet. Please check .env.local settings.";
 
   return (
     <main className="flex min-h-[calc(100vh-88px)] items-center justify-center px-6 py-12">
@@ -40,8 +44,6 @@ export default async function AdminLoginPage({
           </p>
           <div className="mt-12 rounded-[24px] bg-white/12 p-5 text-sm leading-7 text-white/82 backdrop-blur">
             {dict.admin.hint}
-            <br />
-            {helperText}
           </div>
         </section>
 
@@ -84,11 +86,11 @@ export default async function AdminLoginPage({
             </div>
 
             {error === "invalid" ? (
-              <p className="text-sm text-[#b24531]">
-                {locale === "ko"
-                  ? "아이디 또는 비밀번호가 맞지 않습니다."
-                  : "The ID or password is incorrect."}
-              </p>
+              <p className="text-sm text-[#b24531]">{invalidMessage}</p>
+            ) : null}
+
+            {error === "config" ? (
+              <p className="text-sm text-[#b24531]">{configMessage}</p>
             ) : null}
 
             <button

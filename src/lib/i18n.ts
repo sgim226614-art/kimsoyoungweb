@@ -112,7 +112,7 @@ const dictionaries: Record<Locale, Dictionary> = {
       idLabel: "관리자 아이디",
       passwordLabel: "비밀번호",
       submit: "로그인",
-      hint: "실서비스에서는 환경변수로 관리자 계정을 관리합니다.",
+      hint: "ADMIN_LOGIN_ID, ADMIN_LOGIN_PASSWORD, ADMIN_SESSION_SECRET 환경변수를 설정하세요.",
       dashboardTitle: "어드민 대시보드",
       dashboardDescription:
         "추후 공지, 후기, 프로그램 정보를 여기서 관리하도록 확장할 수 있습니다.",
@@ -184,7 +184,7 @@ const dictionaries: Record<Locale, Dictionary> = {
       idLabel: "Admin ID",
       passwordLabel: "Password",
       submit: "Sign in",
-      hint: "In production, the admin account should be managed through environment variables.",
+      hint: "Set ADMIN_LOGIN_ID, ADMIN_LOGIN_PASSWORD, and ADMIN_SESSION_SECRET.",
       dashboardTitle: "Admin Dashboard",
       dashboardDescription:
         "This can be extended to manage notices, reviews, and program details later.",

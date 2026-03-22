@@ -43,6 +43,20 @@ Key idea from the video:
 - i18n routing
 - Auth for admin
 
+## Environment Variables
+
+Create `.env.local` and set:
+
+```bash
+ADMIN_LOGIN_ID=your-admin-id
+ADMIN_LOGIN_PASSWORD=your-admin-password
+ADMIN_SESSION_SECRET=replace-with-a-long-random-secret
+```
+
+Notes:
+- Admin login is disabled when these values are missing.
+- Use a strong random value for `ADMIN_SESSION_SECRET`.
+
 ## Initial Route Draft
 
 - `/ko`, `/en`

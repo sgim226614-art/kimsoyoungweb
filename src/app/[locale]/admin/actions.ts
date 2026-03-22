@@ -1,13 +1,13 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { ADMIN_COOKIE } from "@/lib/auth";
+import {
+  clearAdminSessionCookie,
+  isAuthConfigReady,
+  setAdminSessionCookie,
+} from "@/lib/auth";
 import { isLocale } from "@/lib/i18n";
-
-const defaultAdminId = "admin";
-const defaultAdminPassword = "changeme123!";
 
 export async function loginAction(formData: FormData) {
   const localeValue = formData.get("locale");
@@ -16,21 +16,26 @@ export async function loginAction(formData: FormData) {
 
   const locale =
     typeof localeValue === "string" && isLocale(localeValue) ? localeValue : "ko";
-  const adminId = process.env.ADMIN_LOGIN_ID ?? defaultAdminId;
-  const adminPassword = process.env.ADMIN_LOGIN_PASSWORD ?? defaultAdminPassword;
+  const adminId = process.env.ADMIN_LOGIN_ID;
+  const adminPassword = process.env.ADMIN_LOGIN_PASSWORD;
+
+  if (!isAuthConfigReady() || !adminId || !adminPassword) {
+    redirect(`/${locale}/admin/login?error=config`);
+  }
+
+  if (typeof id !== "string" || typeof password !== "string") {
+    redirect(`/${locale}/admin/login?error=invalid`);
+  }
 
   if (id !== adminId || password !== adminPassword) {
     redirect(`/${locale}/admin/login?error=invalid`);
   }
 
-  const cookieStore = await cookies();
-  cookieStore.set(ADMIN_COOKIE, "authenticated", {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: 60 * 60 * 8,
-  });
+  const isSet = await setAdminSessionCookie();
+
+  if (!isSet) {
+    redirect(`/${locale}/admin/login?error=config`);
+  }
 
   redirect(`/${locale}/admin`);
 }
@@ -39,8 +44,6 @@ export async function logoutAction(formData: FormData) {
   const localeValue = formData.get("locale");
   const locale =
     typeof localeValue === "string" && isLocale(localeValue) ? localeValue : "ko";
-  const cookieStore = await cookies();
-
-  cookieStore.delete(ADMIN_COOKIE);
+  await clearAdminSessionCookie();
   redirect(`/${locale}/admin/login`);
 }
