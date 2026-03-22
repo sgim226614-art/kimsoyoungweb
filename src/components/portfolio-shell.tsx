@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import { LocaleSwitch } from "@/components/locale-switch";
 import type { Locale } from "@/lib/i18n";
 import type { PortfolioContent } from "@/lib/portfolio-content";
 import {
@@ -32,9 +31,9 @@ export function PortfolioShell({
 
   return (
     <div className="portfolio-noise relative isolate min-h-screen bg-[#020202] text-white">
-      <header className="sticky top-0 z-30 border-b border-white/10 bg-black/80 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-8">
-          <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] uppercase tracking-[0.18em] sm:text-xs">
+      <header className="sticky top-0 z-30 border-b border-white/10 bg-black/88 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-center px-4 py-3 sm:px-8">
+          <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] tracking-[0.18em] sm:text-xs">
             {menuItems.map((item) => {
               const isActive = item.slug === activeSlug;
 
@@ -42,23 +41,17 @@ export function PortfolioShell({
                 <Link
                   key={item.slug}
                   href={getPortfolioHref(locale, item.slug)}
-                  className={isActive ? "text-white" : "text-white/72 transition hover:text-white"}
+                  className={
+                    isActive
+                      ? "text-white"
+                      : "text-white/72 transition hover:text-white"
+                  }
                 >
                   {item.label}
                 </Link>
               );
             })}
           </nav>
-
-          <div className="flex items-center gap-2">
-            <Link href={`/${locale}/admin/login`} className="text-xs text-white/70">
-              ADMIN
-            </Link>
-            <LocaleSwitch
-              locale={locale}
-              className="rounded-full border border-white/35 px-3 py-1 text-xs text-white/80"
-            />
-          </div>
         </div>
       </header>
 
