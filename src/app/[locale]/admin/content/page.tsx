@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 
 import { saveHomeContentAction } from "@/app/[locale]/admin/content/actions";
 import { isAdminAuthenticated } from "@/lib/auth";
-import { getHomeHeroContent } from "@/lib/home-content";
+import { getHomeContent } from "@/lib/home-content";
 import { getDictionary, isLocale } from "@/lib/i18n";
 import { isSupabaseAdminConfigured } from "@/lib/supabase-admin";
 
@@ -28,11 +28,15 @@ export default async function AdminContentPage({
 
   const dict = getDictionary(locale);
   const isConfigured = isSupabaseAdminConfigured();
-  const hero = await getHomeHeroContent(locale, {
-    title: dict.hero.title,
-    description: dict.hero.description,
+  const content = await getHomeContent(locale, {
+    heroTitle: dict.hero.title,
+    heroDescription: dict.hero.description,
     primaryCta: dict.hero.primary,
     secondaryCta: dict.hero.secondary,
+    aboutTitle: dict.sections.philosophy.title,
+    aboutBody: dict.sections.philosophy.body,
+    contactTitle: dict.sections.contact.title,
+    contactBody: dict.sections.contact.body,
   });
 
   const savedText =
@@ -105,7 +109,7 @@ export default async function AdminContentPage({
               <input
                 id="heroTitle"
                 name="heroTitle"
-                defaultValue={hero.title}
+                defaultValue={content.heroTitle}
                 required
                 maxLength={120}
                 className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
@@ -123,7 +127,7 @@ export default async function AdminContentPage({
                 id="heroDescription"
                 name="heroDescription"
                 rows={5}
-                defaultValue={hero.description}
+                defaultValue={content.heroDescription}
                 required
                 maxLength={700}
                 className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
@@ -141,7 +145,7 @@ export default async function AdminContentPage({
                 <input
                   id="heroPrimaryCta"
                   name="heroPrimaryCta"
-                  defaultValue={hero.primaryCta}
+                  defaultValue={content.primaryCta}
                   required
                   maxLength={40}
                   className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
@@ -158,12 +162,84 @@ export default async function AdminContentPage({
                 <input
                   id="heroSecondaryCta"
                   name="heroSecondaryCta"
-                  defaultValue={hero.secondaryCta}
+                  defaultValue={content.secondaryCta}
                   required
                   maxLength={40}
                   className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
                 />
               </div>
+            </div>
+
+            <div className="h-px bg-[#ecdccd]" />
+
+            <div>
+              <label
+                htmlFor="aboutTitle"
+                className="mb-2 block text-sm font-medium text-[#704d39]"
+              >
+                {locale === "ko" ? "소개 섹션 제목" : "About Section Title"}
+              </label>
+              <input
+                id="aboutTitle"
+                name="aboutTitle"
+                defaultValue={content.aboutTitle}
+                required
+                maxLength={120}
+                className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="aboutBody"
+                className="mb-2 block text-sm font-medium text-[#704d39]"
+              >
+                {locale === "ko" ? "소개 섹션 본문" : "About Section Body"}
+              </label>
+              <textarea
+                id="aboutBody"
+                name="aboutBody"
+                rows={4}
+                defaultValue={content.aboutBody}
+                required
+                maxLength={700}
+                className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="contactTitle"
+                className="mb-2 block text-sm font-medium text-[#704d39]"
+              >
+                {locale === "ko" ? "문의 섹션 제목" : "Contact Section Title"}
+              </label>
+              <input
+                id="contactTitle"
+                name="contactTitle"
+                defaultValue={content.contactTitle}
+                required
+                maxLength={120}
+                className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="contactBody"
+                className="mb-2 block text-sm font-medium text-[#704d39]"
+              >
+                {locale === "ko" ? "문의 섹션 본문" : "Contact Section Body"}
+              </label>
+              <textarea
+                id="contactBody"
+                name="contactBody"
+                rows={4}
+                defaultValue={content.contactBody}
+                required
+                maxLength={700}
+                className="w-full rounded-2xl border border-[#e5d3c5] bg-[#fffaf6] px-4 py-3 outline-none transition focus:border-[#9b6a4d]"
+              />
             </div>
 
             <button
@@ -187,8 +263,8 @@ export default async function AdminContentPage({
             </p>
             <p className="mt-2">
               {locale === "ko"
-                ? `현재 데이터 소스: ${hero.source === "database" ? "DB" : "기본값"}`
-                : `Current data source: ${hero.source === "database" ? "database" : "fallback"}`}
+                ? `현재 데이터 소스: ${content.source === "database" ? "DB" : "기본값"}`
+                : `Current data source: ${content.source === "database" ? "database" : "fallback"}`}
             </p>
           </div>
 
@@ -202,6 +278,10 @@ export default async function AdminContentPage({
   hero_description text not null,
   primary_cta text not null,
   secondary_cta text not null,
+  about_title text not null,
+  about_body text not null,
+  contact_title text not null,
+  contact_body text not null,
   updated_at timestamptz not null default now()
 );`}
           </pre>

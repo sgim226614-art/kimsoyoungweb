@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { LocaleSwitch } from "@/components/locale-switch";
-import { getHomeHeroContent } from "@/lib/home-content";
+import { getHomeContent } from "@/lib/home-content";
 import { getDictionary, isLocale } from "@/lib/i18n";
 
 export default async function LocalizedHomePage({
@@ -17,11 +17,15 @@ export default async function LocalizedHomePage({
   }
 
   const dict = getDictionary(locale);
-  const hero = await getHomeHeroContent(locale, {
-    title: dict.hero.title,
-    description: dict.hero.description,
+  const content = await getHomeContent(locale, {
+    heroTitle: dict.hero.title,
+    heroDescription: dict.hero.description,
     primaryCta: dict.hero.primary,
     secondaryCta: dict.hero.secondary,
+    aboutTitle: dict.sections.philosophy.title,
+    aboutBody: dict.sections.philosophy.body,
+    contactTitle: dict.sections.contact.title,
+    contactBody: dict.sections.contact.body,
   });
 
   return (
@@ -56,10 +60,10 @@ export default async function LocalizedHomePage({
                 {dict.hero.eyebrow}
               </p>
               <h2 className="max-w-3xl font-display text-5xl leading-[0.95] text-[#2a170f] sm:text-6xl">
-                {hero.title}
+                {content.heroTitle}
               </h2>
               <p className="max-w-2xl text-base leading-8 text-[#5e4638] sm:text-lg">
-                {hero.description}
+                {content.heroDescription}
               </p>
             </div>
 
@@ -68,13 +72,13 @@ export default async function LocalizedHomePage({
                 href="#contact"
                 className="inline-flex items-center justify-center rounded-full bg-[#2b170f] px-6 py-4 text-sm font-semibold text-[#fff7f1] transition hover:bg-[#4a2c1f]"
               >
-                {hero.primaryCta}
+                {content.primaryCta}
               </a>
               <a
                 href="#programs"
                 className="inline-flex items-center justify-center rounded-full border border-[#cfb8a6] px-6 py-4 text-sm font-semibold text-[#6d4835] transition hover:border-[#8f5f42] hover:text-[#8f5f42]"
               >
-                {hero.secondaryCta}
+                {content.secondaryCta}
               </a>
             </div>
           </div>
@@ -110,11 +114,11 @@ export default async function LocalizedHomePage({
             About
           </p>
           <h3 className="mt-4 font-display text-4xl">
-            {dict.sections.philosophy.title}
+            {content.aboutTitle}
           </h3>
         </div>
         <div className="rounded-[28px] border border-[#ead8c9] bg-[#fffaf5] p-8 text-[#5b4437]">
-          <p className="text-lg leading-8">{dict.sections.philosophy.body}</p>
+          <p className="text-lg leading-8">{content.aboutBody}</p>
         </div>
       </section>
 
@@ -170,10 +174,10 @@ export default async function LocalizedHomePage({
             Contact
           </p>
           <h3 className="mt-3 font-display text-4xl text-[#2b1810]">
-            {dict.sections.contact.title}
+            {content.contactTitle}
           </h3>
           <p className="mt-4 max-w-3xl text-lg leading-8 text-[#5f4638]">
-            {dict.sections.contact.body}
+            {content.contactBody}
           </p>
         </div>
       </section>

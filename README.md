@@ -71,6 +71,10 @@ create table if not exists public.site_home_content (
   hero_description text not null,
   primary_cta text not null,
   secondary_cta text not null,
+  about_title text not null,
+  about_body text not null,
+  contact_title text not null,
+  contact_body text not null,
   updated_at timestamptz not null default now()
 );
 ```
