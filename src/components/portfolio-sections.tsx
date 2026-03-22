@@ -142,14 +142,16 @@ function DeviceMock({
 function HeroCard({ content }: { content: PortfolioContent }) {
   return (
     <section className="w-full">
-      <div className="relative aspect-[4/3] w-full overflow-hidden sm:aspect-[16/9] lg:aspect-[16/8.7]">
+      <div className="mx-auto w-full max-w-[1440px] overflow-hidden">
         <Image
           src="/assets/메인화면 1.png"
           alt={`${content.heroTitle} ${content.heroSubtitle}`}
-          fill
+          width={1440}
+          height={1080}
           priority
-          className="object-cover object-center"
-          sizes="100vw"
+          unoptimized
+          className="h-auto w-full"
+          sizes="(max-width: 1440px) 100vw, 1440px"
         />
       </div>
     </section>
